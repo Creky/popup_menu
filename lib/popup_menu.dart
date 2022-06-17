@@ -7,21 +7,21 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'triangle_painter.dart';
 
-abstract class MenuItemProvider {
+abstract class CMMenuItemProvider {
   String get menuTitle;
   Widget? get menuImage;
   TextStyle get menuTextStyle;
   TextAlign get menuTextAlign;
 }
 
-class MenuItem extends MenuItemProvider {
+class CMMenuItem extends CMMenuItemProvider {
   Widget? image; // 图标名称
   String title; // 菜单标题
   var userInfo; // 额外的菜单荐信息
   TextStyle textStyle;
   TextAlign textAlign;
 
-  MenuItem(
+  CMMenuItem(
       {this.title = "",
       this.image,
       this.userInfo,
@@ -41,17 +41,17 @@ class MenuItem extends MenuItemProvider {
   TextAlign get menuTextAlign => textAlign;
 }
 
-enum MenuType { big, oneLine }
+enum CMMenuType { big, oneLine }
 
-typedef MenuClickCallback = Function(MenuItemProvider item);
-typedef PopupMenuStateChanged = Function(bool isShow);
+typedef CMMenuClickCallback = Function(CMMenuItemProvider item);
+typedef CMPopupMenuStateChanged = Function(bool isShow);
 
-class PopupMenu {
+class CMPopupMenu {
   static var itemWidth = 72.0;
   static var itemHeight = 65.0;
   static var arrowHeight = 10.0;
   OverlayEntry? _entry;
-  late List<MenuItemProvider> items;
+  late List<CMMenuItemProvider> items;
 
   /// row count
   int _row = 1;
@@ -73,8 +73,8 @@ class PopupMenu {
 
   /// callback
   VoidCallback? dismissCallback;
-  MenuClickCallback? onClickMenu;
-  PopupMenuStateChanged? stateChanged;
+  CMMenuClickCallback? onClickMenu;
+  CMPopupMenuStateChanged? stateChanged;
 
   late Size _screenSize; // 屏幕的尺寸
 
@@ -90,16 +90,16 @@ class PopupMenu {
   bool _isShow = false;
   bool get isShow => _isShow;
 
-  PopupMenu(
-      {MenuClickCallback? onClickMenu,
+  CMPopupMenu(
+      {CMMenuClickCallback? onClickMenu,
       required BuildContext context,
       VoidCallback? onDismiss,
       int maxColumn = 4,
       Color? backgroundColor,
       Color? highlightColor,
       Color? lineColor,
-      PopupMenuStateChanged? stateChanged,
-      required List<MenuItemProvider> items}) {
+      CMPopupMenuStateChanged? stateChanged,
+      required List<CMMenuItemProvider> items}) {
     this.onClickMenu = onClickMenu;
     this.dismissCallback = onDismiss;
     this.stateChanged = stateChanged;
@@ -108,27 +108,28 @@ class PopupMenu {
     this._backgroundColor = backgroundColor ?? Color(0xff232323);
     this._lineColor = lineColor ?? Color(0xff353535);
     this._highlightColor = highlightColor ?? Color(0x55000000);
-    PopupMenu.context = context;
+    CMPopupMenu.context = context;
   }
 
-  void show({Rect? rect, GlobalKey? widgetKey, List<MenuItemProvider>? items}) {
+  void show(
+      {Rect? rect, GlobalKey? widgetKey, List<CMMenuItemProvider>? items}) {
     if (rect == null && widgetKey == null) {
       print("'rect' and 'key' can't be both null");
       return;
     }
 
     this.items = items ?? this.items;
-    this._showRect = rect ?? PopupMenu.getWidgetGlobalRect(widgetKey!);
+    this._showRect = rect ?? CMPopupMenu.getWidgetGlobalRect(widgetKey!);
     this._screenSize = window.physicalSize / window.devicePixelRatio;
     this.dismissCallback = dismissCallback;
 
-    _calculatePosition(PopupMenu.context);
+    _calculatePosition(CMPopupMenu.context);
 
     _entry = OverlayEntry(builder: (context) {
       return buildPopupMenuLayout(_offset);
     });
 
-    Overlay.of(PopupMenu.context)!.insert(_entry!);
+    Overlay.of(CMPopupMenu.context)!.insert(_entry!);
     _isShow = true;
     if (this.stateChanged != null) {
       this.stateChanged!(true);
@@ -145,7 +146,7 @@ class PopupMenu {
   void _calculatePosition(BuildContext context) {
     _col = _calculateColCount();
     _row = _calculateRowCount();
-    _offset = _calculateOffset(PopupMenu.context);
+    _offset = _calculateOffset(CMPopupMenu.context);
   }
 
   Offset _calculateOffset(BuildContext context) {
@@ -270,7 +271,7 @@ class PopupMenu {
 
   // 创建一行的item,  row 从0开始算
   List<Widget> _createRowItems(int row) {
-    List<MenuItemProvider> subItems =
+    List<CMMenuItemProvider> subItems =
         items.sublist(row * _col, min(row * _col + _col, items.length));
     List<Widget> itemWidgets = [];
     int i = 0;
@@ -341,7 +342,7 @@ class PopupMenu {
     return width / ratio;
   }
 
-  Widget _createMenuItem(MenuItemProvider item, bool showLine) {
+  Widget _createMenuItem(CMMenuItemProvider item, bool showLine) {
     return _MenuItemWidget(
       item: item,
       showLine: showLine,
@@ -352,7 +353,7 @@ class PopupMenu {
     );
   }
 
-  void itemClicked(MenuItemProvider item) {
+  void itemClicked(CMMenuItemProvider item) {
     if (onClickMenu != null) {
       onClickMenu!(item);
     }
@@ -379,14 +380,14 @@ class PopupMenu {
 }
 
 class _MenuItemWidget extends StatefulWidget {
-  final MenuItemProvider item;
+  final CMMenuItemProvider item;
   // 是否要显示右边的分隔线
   final bool showLine;
   final Color lineColor;
   final Color backgroundColor;
   final Color highlightColor;
 
-  final Function(MenuItemProvider item)? clickCallback;
+  final Function(CMMenuItemProvider item)? clickCallback;
 
   _MenuItemWidget(
       {required this.item,
@@ -434,8 +435,8 @@ class _MenuItemWidgetState extends State<_MenuItemWidget> {
         }
       },
       child: Container(
-          width: PopupMenu.itemWidth,
-          height: PopupMenu.itemHeight,
+          width: CMPopupMenu.itemWidth,
+          height: CMPopupMenu.itemHeight,
           decoration: BoxDecoration(
               color: color,
               border: Border(
