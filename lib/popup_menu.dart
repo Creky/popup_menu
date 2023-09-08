@@ -47,7 +47,7 @@ typedef CMMenuClickCallback = Function(CMMenuItemProvider item);
 typedef CMPopupMenuStateChanged = Function(bool isShow);
 
 class CMPopupMenu {
-  static var itemWidth = 72.0;
+  static var itemWidth = 82.0;
   static var itemHeight = 65.0;
   static var arrowHeight = 10.0;
   OverlayEntry? _entry;
@@ -461,11 +461,15 @@ class _MenuItemWidgetState extends State<_MenuItemWidget> {
           ),
           Container(
             height: 22.0,
+            padding: const EdgeInsets.only(left: 4.0, right: 4.0),
             child: Material(
               color: Colors.transparent,
-              child: Text(
-                widget.item.menuTitle,
-                style: widget.item.menuTextStyle,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  widget.item.menuTitle,
+                  style: widget.item.menuTextStyle,
+                ),
               ),
             ),
           )
