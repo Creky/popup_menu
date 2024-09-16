@@ -25,7 +25,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  PopupMenu menu;
+  CMPopupMenu menu;
   GlobalKey btnKey = GlobalKey();
   GlobalKey btnKey2 = GlobalKey();
   GlobalKey btnKey3 = GlobalKey();
@@ -34,7 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
 
-    menu = PopupMenu(items: [
+    menu = CMPopupMenu(items: [
       // MenuItem(title: 'Copy', image: Image.asset('assets/copy.png')),
       // MenuItem(title: 'Home', image: Icon(Icons.home, color: Colors.white,)),
       MenuItem(
@@ -68,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
     print('menu is ${isShow ? 'showing' : 'closed'}');
   }
 
-  void onClickMenu(MenuItemProvider item) {
+  void onClickMenu(CMMenuItemProvider item) {
     print('Click menu -> ${item.menuTitle}');
   }
 
@@ -78,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    PopupMenu.context = context;
+    CMPopupMenu.context = context;
 
     return Scaffold(
       appBar: AppBar(
@@ -147,7 +147,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void maxColumn() {
-    PopupMenu menu = PopupMenu(
+    CMPopupMenu menu = CMPopupMenu(
         // backgroundColor: Colors.teal,
         // lineColor: Colors.tealAccent,
         maxColumn: 3,
@@ -193,7 +193,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   //
   void customBackground() {
-    PopupMenu menu = PopupMenu(
+    CMPopupMenu menu = CMPopupMenu(
         // backgroundColor: Colors.teal,
         // lineColor: Colors.tealAccent,
         // maxColumn: 2,
